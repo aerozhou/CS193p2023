@@ -8,15 +8,68 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    let emojis = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐯", "🦁", "🐮",
+                  "🐷", "🐸", "🐵", "🐔", "🦄", "🐝", "🐠", "🦀", "🐬", "🐳", "🐿️", "🦚"]
+    // WHY @State
+    @State var emoji_count = 4
+    
     var body: some View {
-        HStack {
-            CardView(name: "🐶")
-            CardView(name: "🐱")
-            CardView(name: "🐭")
-            CardView(name: "🐰")
+        VStack {
+            
+            HStack {
+                ForEach(0..<emoji_count, id: \.self) {index in
+                    CardView(name: emojis[index])
+                }
+            }
+            .foregroundColor(.orange)
+            
+            Spacer()
+            
+            HStack {
+                HStack {
+                    cardRemover
+                    Spacer()
+                    cardAdder
+                }
+            }
         }
         .padding()
     }
+    
+    var cardShuffer: some View {
+        Button(action: {
+            
+        }, label: {
+            HStack {
+                Image(systemName: "circle.circle")
+                Text("Shuffle")
+            }
+    })
+    }
+    
+    var cardRemover: some View {
+        Button(action: {
+            if emoji_count > 1 {
+                emoji_count -= 1
+            }
+        }, label: {
+            Image(systemName: "minus.circle")
+            Text("Minus")
+        })
+    }
+    
+    var cardAdder: some View {
+        Button(action: {
+            if emoji_count < emojis.count {
+                emoji_count += 1
+            }
+        }, label: {
+            Image(systemName: "plus.circle")
+            Text("Add")
+        })
+    }
+    
 }
 
 struct CardView: View {
@@ -38,7 +91,7 @@ struct CardView: View {
         }
         .foregroundColor(.orange)
         .onTapGesture {
-            self.isFaceUp = !isFaceUp
+            isFaceUp.toggle()
         }
     }
 }
